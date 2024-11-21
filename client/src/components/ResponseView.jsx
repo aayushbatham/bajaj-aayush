@@ -23,13 +23,13 @@ const ResponseView = ({ response }) => {
           </h3>
           <div className="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg text-gray-800 dark:text-gray-200">
             {Array.isArray(data) ? (
-              <div className="flex space-x-4 flex-wrap">
+              <ul className="list-disc pl-6">
                 {data.map((item, index) => (
-                  <div key={index} className="py-1 px-2 bg-gray-200 dark:bg-gray-600 rounded-lg">
+                  <li key={index} className="py-1">
                     {item}
-                  </div>
+                  </li>
                 ))}
-              </div>
+              </ul>
             ) : (
               <p>{data}</p> // For single value fields
             )}
