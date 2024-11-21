@@ -13,16 +13,33 @@ const InputForm = ({ setResponse }) => {
 
     try {
       const parsedInput = JSON.parse(jsonInput);
+
+      // Validate the 'data' field is an array
       if (!Array.isArray(parsedInput.data)) {
         throw new Error("Invalid JSON: 'data' should be an array");
       }
 
+      // Optionally validate 'file_b64' if it exists (it should be a valid base64 string)
+      if (parsedInput.file_b64 && !isBase64(parsedInput.file_b64)) {
+        throw new Error("Invalid 'file_b64': Not a valid base64 string");
+      }
+
+      // Make the API request if validation passes
       const response = await axios.post("https://bajaj-aayush.onrender.com/bfhl", parsedInput);
       setResponse(response.data);
     } catch (err) {
       setError(err.message || "Invalid input");
     } finally {
       setLoading(false);  // Set loading to false when the request is completed
+    }
+  };
+
+  // Helper function to check if a string is a valid base64 encoded string
+  const isBase64 = (str) => {
+    try {
+      return !!str && btoa(atob(str)) === str;
+    } catch (e) {
+      return false;
     }
   };
 
@@ -34,7 +51,7 @@ const InputForm = ({ setResponse }) => {
       <textarea
         className="w-full p-4 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
         rows="5"
-        placeholder='{"data": ["A", "C", "z"]}'
+        placeholder='{"data": ["M", "1", "334", "4", "B", "Z", "a", "7"], "file_b64": "BASE_64_STRING"}'
         value={jsonInput}
         onChange={(e) => setJsonInput(e.target.value)}
       />
