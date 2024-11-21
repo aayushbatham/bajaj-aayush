@@ -17,7 +17,7 @@ const InputForm = ({ setResponse }) => {
         throw new Error("Invalid JSON: 'data' should be an array");
       }
 
-      const response = await axios.post("http://localhost:3000/bfhl", parsedInput);
+      const response = await axios.post("https://bajaj-aayush.onrender.com/bfhl", parsedInput);
       setResponse(response.data);
     } catch (err) {
       setError(err.message || "Invalid input");
