@@ -16,7 +16,7 @@ const App = () => {
 
   const fetchResponse = async (data) => {
     try {
-      const res = await axios.post("http://localhost:3000/bfhl", data);
+      const res = await axios.post("https://bajaj-aayush.onrender.com/bfhl", data);
       if (res.data && res.data.roll_number) {
         document.title = res.data.roll_number;
       }
