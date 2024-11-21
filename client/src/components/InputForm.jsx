@@ -4,10 +4,12 @@ import axios from "axios";
 const InputForm = ({ setResponse }) => {
   const [jsonInput, setJsonInput] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);  // New state for loading
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    setLoading(true);  // Set loading to true when request is being made
 
     try {
       const parsedInput = JSON.parse(jsonInput);
@@ -15,9 +17,12 @@ const InputForm = ({ setResponse }) => {
         throw new Error("Invalid JSON: 'data' should be an array");
       }
 
-      await setResponse(parsedInput);
+      const response = await axios.post("http://localhost:3000/bfhl", parsedInput);
+      setResponse(response.data);
     } catch (err) {
       setError(err.message || "Invalid input");
+    } finally {
+      setLoading(false);  // Set loading to false when the request is completed
     }
   };
 
@@ -27,7 +32,7 @@ const InputForm = ({ setResponse }) => {
         Enter JSON Input
       </h2>
       <textarea
-        className="w-full p-4 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800 dark:text-gray-200"
+        className="w-full p-4 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
         rows="5"
         placeholder='{"data": ["A", "C", "z"]}'
         value={jsonInput}
@@ -40,6 +45,13 @@ const InputForm = ({ setResponse }) => {
         Submit
       </button>
       {error && <p className="text-red-500 mt-4 text-sm">{error}</p>}
+      
+      {/* Loading spinner */}
+      {loading && (
+        <div className="flex justify-center mt-4">
+          <div className="loader"></div>
+        </div>
+      )}
     </div>
   );
 };
